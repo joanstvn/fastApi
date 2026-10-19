@@ -19,15 +19,16 @@ app = FastAPI(
 async def root():
     return {"message": "Hello API "}
 
-@app.post("/trainees", status_code=status.HTTP_201_CREATED)
+@app.post("/trainees", response_description="Registrar un nuevo aprendiz", status_code=status.HTTP_201_CREATED)
 def create_trainee_route(trainee: TraineeModel):
     return create_trainee(trainee)
 
-@app.get("/trainees")
+@app.get("/trainees", response_description="Obtener todos los aprendices")
 def get_trainees_route():
     return get_all_trainees()
 
-@app.get("/trainees/{trainee_id}")
+
+@app.get("/trainees/{trainee_id}", response_description="Obtener un aprendiz por su ID")
 def get_trainee_route(trainee_id: str):
     trainee = get_trainee_by_id(trainee_id)
     if trainee is None:
@@ -37,7 +38,7 @@ def get_trainee_route(trainee_id: str):
         )
     return trainee
 
-@app.put("/trainees/{trainee_id}")
+@app.put("/trainees/{trainee_id}", response_description="Actualizar un aprendiz existente")
 def update_trainee_route(trainee_id: str, data: TraineeUpdateModel):
     trainee = update_trainee(trainee_id, data)
     if trainee is None:
@@ -47,7 +48,7 @@ def update_trainee_route(trainee_id: str, data: TraineeUpdateModel):
         )
     return trainee
 
-@app.delete("/trainees/{trainee_id}")
+@app.delete("/trainees/{trainee_id}", response_description="Eliminar un aprendiz existente")
 def delete_trainee_route(trainee_id: str):
     if not delete_trainee(trainee_id):
         raise HTTPException(
